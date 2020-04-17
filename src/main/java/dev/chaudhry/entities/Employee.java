@@ -2,7 +2,7 @@ package dev.chaudhry.entities;
 
 public class Employee {
 
-    private int EmployeeID;
+    private String EmployeeID;
     private String name;
     private String username;
     private String password;
@@ -10,18 +10,18 @@ public class Employee {
     public Employee() {
     }
 
-    public Employee(int employeeID, String name, String username, String password) {
+    public Employee(String employeeID, String name, String username, String password) {
         EmployeeID = employeeID;
         this.name = name;
         this.username = username;
         this.password = password;
     }
 
-    public int getEmployeeID() {
+    public String getEmployeeID() {
         return EmployeeID;
     }
 
-    public void setEmployeeID(int employeeID) {
+    public void setEmployeeID(String employeeID) {
         EmployeeID = employeeID;
     }
 
