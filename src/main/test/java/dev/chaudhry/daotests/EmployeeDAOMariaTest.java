@@ -12,7 +12,7 @@ public class EmployeeDAOMariaTest {
     public void readEmployee(){
         Employee employee = new Employee();
         employee.setEmployeeID("employee1");
-        employee.setPassword("ABC1234");
+        employee.setPassword("ABC123");
         System.out.println(employeedao.readEmployee(employee));
 
     }

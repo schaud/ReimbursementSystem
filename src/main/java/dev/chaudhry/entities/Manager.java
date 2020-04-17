@@ -1,7 +1,7 @@
 package dev.chaudhry.entities;
 
 public class Manager {
-    private int  managerID;
+    private String  managerID;
     private String username;
     private String password;
 
@@ -9,17 +9,17 @@ public class Manager {
     public Manager() {
     }
 
-    public Manager(int managerID, String username, String password) {
+    public Manager(String managerID, String username, String password) {
         this.managerID = managerID;
         this.username = username;
         this.password = password;
     }
 
-    public int getManagerID() {
+    public String getManagerID() {
         return managerID;
     }
 
-    public void setManagerID(int managerID) {
+    public void setManagerID(String managerID) {
         this.managerID = managerID;
     }
 

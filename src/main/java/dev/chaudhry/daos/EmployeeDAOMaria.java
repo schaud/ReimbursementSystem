@@ -1,9 +1,8 @@
 package dev.chaudhry.daos;
 import dev.chaudhry.entities.Employee;
 import dev.chaudhry.utils.ConnectionUtil;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+
+import java.sql.*;
 
 public class EmployeeDAOMaria implements EmployeeDAO {
 
@@ -17,13 +16,20 @@ public class EmployeeDAOMaria implements EmployeeDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, employee.getEmployeeID());
             ps.setString(2, employee.getPassword());
-            ps.execute();
+            ResultSet rs = ps.executeQuery();
+            ResultSetMetaData rsmd = rs.getMetaData();
+
+                rs.next();
+                String ID = rs.getString("ID");
+                String password = rs.getString("PASSWORD");
+                employee.setEmployeeID(ID);
+                employee.setPassword(password);
+                return employee;
 
 
-            return employee;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return null;
         }
     }
