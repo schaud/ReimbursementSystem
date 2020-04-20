@@ -29,7 +29,7 @@ public class EmployeeDAOMaria implements EmployeeDAO {
 
 
         } catch (SQLException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return null;
         }
     }

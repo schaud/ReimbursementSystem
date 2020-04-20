@@ -3,8 +3,6 @@ package dev.chaudhry.entities;
 public class Employee {
 
     private String EmployeeID;
-    private String name;
-    private String username;
     private String password;
 
     public Employee() {
@@ -12,8 +10,6 @@ public class Employee {
 
     public Employee(String employeeID, String name, String username, String password) {
         EmployeeID = employeeID;
-        this.name = name;
-        this.username = username;
         this.password = password;
     }
 
@@ -23,22 +19,6 @@ public class Employee {
 
     public void setEmployeeID(String employeeID) {
         EmployeeID = employeeID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
@@ -52,9 +32,7 @@ public class Employee {
     @Override
     public String toString() {
         return "Employee{" +
-                "EmployeeID=" + EmployeeID +
-                ", name='" + name + '\'' +
-                ", username='" + username + '\'' +
+                "EmployeeID='" + EmployeeID + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }
