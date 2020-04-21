@@ -17,7 +17,13 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // read that session attribute and send it to the front end
-        String username = (String) request.getSession().getAttribute("employee");
+        String username;
+        if ((String) request.getSession().getAttribute("employee") != null){
+            username = (String) request.getSession().getAttribute("employee");
+        } else {
+            username = (String) request.getSession().getAttribute("manager");
+
+        }
         response.getWriter().append(username);
 
     }

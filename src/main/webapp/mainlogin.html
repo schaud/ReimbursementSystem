@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Welcome to xyz Reimbursement System!</h1>
+<h2> Please select your type of user account: </h2>
+
+<button id="empButn" type="button">Employee</button>
+<button id="MngrButn" type="button">Manager</button>
+
+</body>
+
+<script type="text/javascript">
+    document.getElementById("empButn").onclick = function () {
+        location.href = "http://localhost:8080/login.html";
+    };
+    document.getElementById("MngrButn").onclick = function () {
+        location.href = "http://localhost:8080/managerlogin.html";
+    };
+
+
+</script>
+</html>
