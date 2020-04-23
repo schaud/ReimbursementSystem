@@ -5,18 +5,20 @@ public class Reimbursement {
     private int reimbursementID;
     private int amount;
     private String description;
-    private int requesterID;
+    private String requesterID;
     private String status;
+    private String managerID;
 
     public Reimbursement() {
     }
 
-    public Reimbursement(int reimbursementID, int amount, String description, int requesterID, String status) {
+    public Reimbursement(int reimbursementID, int amount, String description, String requesterID, String status, String managerID) {
         this.reimbursementID = reimbursementID;
         this.amount = amount;
         this.description = description;
         this.requesterID = requesterID;
         this.status = status;
+        this.managerID = managerID;
     }
 
     public int getReimbursementID() {
@@ -43,11 +45,11 @@ public class Reimbursement {
         this.description = description;
     }
 
-    public int getRequesterID() {
+    public String getRequesterID() {
         return requesterID;
     }
 
-    public void setRequesterID(int requesterID) {
+    public void setRequesterID(String requesterID) {
         this.requesterID = requesterID;
     }
 
@@ -59,14 +61,23 @@ public class Reimbursement {
         this.status = status;
     }
 
+    public String getManagerID() {
+        return managerID;
+    }
+
+    public void setManagerID(String managerID) {
+        this.managerID = managerID;
+    }
+
     @Override
     public String toString() {
         return "Reimbursement{" +
                 "reimbursementID=" + reimbursementID +
                 ", amount=" + amount +
                 ", description='" + description + '\'' +
-                ", requesterID=" + requesterID +
+                ", requesterID='" + requesterID + '\'' +
                 ", status='" + status + '\'' +
+                ", managerID='" + managerID + '\'' +
                 '}';
     }
 }

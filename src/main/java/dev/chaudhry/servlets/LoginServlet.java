@@ -29,10 +29,11 @@ public class LoginServlet extends HttpServlet {
 
         if (employee != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("employee", employee.getEmployeeID());
+            session.setAttribute("employee", employee);
             destPage = "home.html";
-            RequestDispatcher dispatcher = request.getRequestDispatcher(destPage);
-            dispatcher.forward(request, response);
+            response.sendRedirect(destPage);
+//            RequestDispatcher dispatcher = request.getRequestDispatcher(destPage);
+//            dispatcher.forward(request, response);
         } else {
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
@@ -41,8 +42,6 @@ public class LoginServlet extends HttpServlet {
             out.println("location='login.html';");
             out.println("</script>");
         }
-
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

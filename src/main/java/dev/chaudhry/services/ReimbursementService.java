@@ -1,15 +1,28 @@
 package dev.chaudhry.services;
 
+import dev.chaudhry.entities.Employee;
+import dev.chaudhry.entities.Manager;
 import dev.chaudhry.entities.Reimbursement;
+
+import java.util.ArrayList;
 
 public interface ReimbursementService {
 
-    public Reimbursement submitReimbursement(Reimbursement reimbursement);
+     Reimbursement submitReimbursement(Reimbursement reimbursement);
 
-    public Reimbursement approveReimbursement(Reimbursement reimbursement);
+     Reimbursement approveReimbursement(Reimbursement reimbursement, Manager Manager);
 
-    public Reimbursement approveReimbursement(Reimbursement reimbursement, boolean isApproved);
+     Reimbursement denyReimbursement(Reimbursement reimbursement, Manager manager);
 
-    public Reimbursement denyReimbursement(Reimbursement reimbursement);
+     ArrayList<Reimbursement> viewAllReimbursements ();
+
+     ArrayList<Reimbursement> viewPendingReimbursements ();
+
+     ArrayList<Reimbursement> viewApprovedReimbursements ();
+
+     ArrayList<Reimbursement> viewDeniedReimbursements ();
+
+     ArrayList<Reimbursement> viewEmployeeReimbursements (Employee employee);
+
 
 }

@@ -29,10 +29,12 @@ public class ManagerLoginServlet extends HttpServlet {
 
         if (manager != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("manager", manager.getManagerID());
-            destPage = "home.html";
-            RequestDispatcher dispatcher = request.getRequestDispatcher(destPage);
-            dispatcher.forward(request, response);
+            session.setAttribute("manager", manager);
+            destPage = "mhome.html";
+            response.sendRedirect(destPage);
+
+//            RequestDispatcher dispatcher = request.getRequestDispatcher(destPage);
+//            dispatcher.forward(request, response);
         } else {
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();

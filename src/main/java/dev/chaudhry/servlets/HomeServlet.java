@@ -1,5 +1,8 @@
 package dev.chaudhry.servlets;
 
+import dev.chaudhry.entities.Employee;
+import dev.chaudhry.entities.Manager;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,14 +20,14 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // read that session attribute and send it to the front end
-        String username;
-        if ((String) request.getSession().getAttribute("employee") != null){
-            username = (String) request.getSession().getAttribute("employee");
-        } else {
-            username = (String) request.getSession().getAttribute("manager");
+        if (request.getSession().getAttribute("employee") != null){
+            Employee username = (Employee) request.getSession().getAttribute("employee");
+            response.getWriter().append(username.getEmployeeID());
 
+        } else {
+            Manager username = (Manager) request.getSession().getAttribute("manager");
+            response.getWriter().append(username.getManagerID());
         }
-        response.getWriter().append(username);
 
     }
 }

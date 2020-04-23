@@ -22,7 +22,7 @@ public class LogoutServlet extends HttpServlet {
         if (session != null) {
             session.removeAttribute("employee");
 
-            RequestDispatcher dispatcher = request.getRequestDispatcher("login.html");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("mainlogin.html");
             dispatcher.forward(request, response);
         }
     }

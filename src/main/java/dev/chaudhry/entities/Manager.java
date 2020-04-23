@@ -1,18 +1,12 @@
 package dev.chaudhry.entities;
 
 public class Manager {
-    private String  managerID;
-    private String username;
+    private String managerID;
     private String password;
+    private int amountApproved;
 
 
     public Manager() {
-    }
-
-    public Manager(String managerID, String username, String password) {
-        this.managerID = managerID;
-        this.username = username;
-        this.password = password;
     }
 
     public String getManagerID() {
@@ -23,14 +17,6 @@ public class Manager {
         this.managerID = managerID;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -39,14 +25,20 @@ public class Manager {
         this.password = password;
     }
 
+    public int getAmountApproved() {
+        return amountApproved;
+    }
+
+    public void setAmountApproved(int amountApproved) {
+        this.amountApproved = amountApproved;
+    }
+
     @Override
     public String toString() {
         return "Manager{" +
-                "managerID=" + managerID +
-                ", username='" + username + '\'' +
+                "managerID='" + managerID + '\'' +
                 ", password='" + password + '\'' +
+                ", amountApproved='" + amountApproved + '\'' +
                 '}';
     }
-
-
 }

@@ -9,9 +9,20 @@
     <h1>Welcome to Reimbursements!</h1>
     <h2 id="usernameHeading"> You are logged in as: </h2>
 
-    <a href="/logout">Logout</a>
+
 </div>
+
+<button id="getAllReimburse" type="button" onclick="getEmpReimbursements()">View Your Reimbursements</button>
+<button id="submitReimburse" type="button" onclick="getEmpReimbursements()">Submit a New Reimbursement Request</button>
+
+<form name= "logoutform" action="/logout" method="get">
+    <input type="submit" value="Log Out">
+</form>
+
+<table id="reimbursementTable"></table>
+
 </body>
+
 
 <script>
 
@@ -25,6 +36,29 @@
         console.log("finished show user")
     }
     showUser()
+
+
+    async function getEmpReimbursements(){
+        let httpResponse = await fetch("http://localhost:8080/api/employeereimbursements");
+        let reimbursements = await httpResponse.json();
+        let tableData = document.getElementById("reimbursementTable");
+
+        tableData.innerHTML = "<thread><tr><th>Reimbursement ID</th><th>Employee ID</th><th>Amount</th><th>Description</th><th>Status</th><th>Handling Manager</th></tr></thread>"
+
+        for (reimbursement of reimbursements){
+            tableData.innerHTML = tableData.innerHTML +
+                `<tr><td>${reimbursement.reimbursementID}</td>
+            <td>${reimbursement.requesterID}</td>
+            <td>${reimbursement.amount}</td>
+            <td>${reimbursement.description}</td>
+            <td>${reimbursement.status}</td>
+            <td>${reimbursement.managerID}</td>`
+        }
+
+    }
+
+
+
 
 </script>
 </html>

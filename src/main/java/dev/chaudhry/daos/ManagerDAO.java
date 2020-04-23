@@ -6,4 +6,6 @@ public interface ManagerDAO {
 
     Manager readManager(Manager manager);
 
+    Manager updateApproved(Manager manager, int amount);
+
 }

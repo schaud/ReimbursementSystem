@@ -36,4 +36,24 @@ public class ManagerDAOMaria implements ManagerDAO {
         }
     }
 
+    @Override
+    public Manager updateApproved(Manager manager, int amount) {
+
+        try (
+                Connection conn = ConnectionUtil.createConnection()) {
+            String sql = "UPDATE MANAGER SET APPROVED = ? WHERE ID = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, manager.getAmountApproved() + amount);
+            ps.setString(2, manager.getManagerID());
+            boolean success = ps.execute();
+
+            return manager;
+
+        } catch (
+                SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
 }
