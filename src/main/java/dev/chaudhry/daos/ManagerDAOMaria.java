@@ -24,8 +24,10 @@ public class ManagerDAOMaria implements ManagerDAO {
             rs.next();
             String ID = rs.getString("ID");
             String password = rs.getString("PASSWORD");
+            int amount = rs.getInt("APPROVED");
             manager.setManagerID(ID);
             manager.setPassword(password);
+            manager.setAmountApproved(amount);
             return manager;
 
 
@@ -40,12 +42,14 @@ public class ManagerDAOMaria implements ManagerDAO {
     public Manager updateApproved(Manager manager, int amount) {
 
         try (
-                Connection conn = ConnectionUtil.createConnection()) {
+
+            Connection conn = ConnectionUtil.createConnection()) {
+
             String sql = "UPDATE MANAGER SET APPROVED = ? WHERE ID = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, manager.getAmountApproved() + amount);
             ps.setString(2, manager.getManagerID());
-            boolean success = ps.execute();
+            ps.execute();
 
             return manager;
 

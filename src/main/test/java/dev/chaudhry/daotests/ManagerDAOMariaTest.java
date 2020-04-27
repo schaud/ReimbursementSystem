@@ -17,4 +17,15 @@ public class ManagerDAOMariaTest {
 
     }
 
+    @Test
+    public void updateApproved(){
+        Manager manager = new Manager();
+        manager.setManagerID("manager1");
+        manager.setPassword("QWERTY1@");
+        managerdao.readManager(manager);
+        int amount = 200;
+        managerdao.updateApproved(manager, amount);
+        System.out.println(managerdao.readManager(manager));
+    }
+
 }

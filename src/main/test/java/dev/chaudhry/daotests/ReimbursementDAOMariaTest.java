@@ -37,5 +37,18 @@ public class ReimbursementDAOMariaTest {
 
     }
 
+    @Test
+    public void mostRequests(){
+        System.out.println(reimbursementdao.mostRequests().get(0).getRequesterID());
+        System.out.println(reimbursementdao.mostRequests().get(0).getReimbursementAttempts());
+
+    }
+
+    @Test
+    public void avgReimburse(){
+        System.out.println(reimbursementdao.avgReimburse());
+    }
+
+
 
 }

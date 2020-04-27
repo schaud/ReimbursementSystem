@@ -33,7 +33,7 @@ public class ReimbursementServiceImplTest {
     @Test
     public void approveReimbursement() {
         manager.setManagerID("manager1");
-        reimbursement = reimbursementdao.getReimbursementByID(2);
+        reimbursement = reimbursementdao.getReimbursementByID(20);
         System.out.println(reimbursementserv.approveReimbursement(reimbursement, manager));
     }
 

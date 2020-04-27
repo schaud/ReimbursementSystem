@@ -1,12 +1,13 @@
 package dev.chaudhry.daos;
 
+import dev.chaudhry.entities.EmployeeReimburse;
 import dev.chaudhry.entities.Reimbursement;
 import dev.chaudhry.utils.ConnectionUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ReimburstmentDAOMaria implements ReimbursementDAO{
+public class ReimburstmentDAOMaria implements ReimbursementDAO {
 
     @Override
     public Reimbursement createRequest(Reimbursement reimbursement) {
@@ -89,7 +90,7 @@ public class ReimburstmentDAOMaria implements ReimbursementDAO{
     }
 
     @Override
-    public Reimbursement getReimbursementByID(int id){
+    public Reimbursement getReimbursementByID(int id) {
 
         try (Connection conn = ConnectionUtil.createConnection()) {
             String sql = "SELECT * FROM REIMBURSEMENTS WHERE ID = ?";
@@ -223,7 +224,7 @@ public class ReimburstmentDAOMaria implements ReimbursementDAO{
         try (Connection conn = ConnectionUtil.createConnection()) {
             String sql = "SELECT * FROM REIMBURSEMENTS WHERE STATUS = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1,"Denied");
+            ps.setString(1, "Denied");
 
             ResultSet rs = ps.executeQuery();
 
@@ -249,5 +250,107 @@ public class ReimburstmentDAOMaria implements ReimbursementDAO{
         }
 
 
+    }
+
+    @Override
+    public ArrayList<EmployeeReimburse> mostRequests() {
+
+        try (Connection conn = ConnectionUtil.createConnection()) {
+            String sql = "SELECT REQUESTER_ID, COUNT(REQUESTER_ID) " +
+                    "FROM REIMBURSEMENTS GROUP BY REQUESTER_ID " +
+                    "ORDER BY COUNT(REQUESTER_ID) DESC";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            ArrayList<EmployeeReimburse> empReimb = new ArrayList<>();
+
+            while (rs.next()){
+
+                EmployeeReimburse er = new EmployeeReimburse();
+                er.setRequesterID(rs.getString("REQUESTER_ID"));
+                er.setReimbursementAttempts(rs.getInt(2));
+                empReimb.add(er);
+            }
+
+            return empReimb;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public int avgReimburse(){
+        try (Connection conn = ConnectionUtil.createConnection()) {
+            String sql = "SELECT AVG(AMOUNT) FROM REIMBURSEMENTS";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            rs.next();
+
+            return rs.getInt(1);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+    }
+
+    public int totalApproved(){
+
+        try (Connection conn = ConnectionUtil.createConnection()) {
+            String sql = "SELECT SUM(AMOUNT) FROM REIMBURSEMENTS WHERE STATUS = 'Approved'";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+
+            rs.next();
+
+            return rs.getInt(1);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int totalDenied(){
+
+        try (Connection conn = ConnectionUtil.createConnection()) {
+            String sql = "SELECT SUM(AMOUNT) FROM REIMBURSEMENTS WHERE STATUS = 'Denied'";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            rs.next();
+
+            return rs.getInt(1);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int totalRequests(){
+
+        try (Connection conn = ConnectionUtil.createConnection()) {
+            String sql = "SELECT COUNT(*) as TOTAL_REQUESTS FROM REIMBURSEMENTS";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            rs.next();
+
+            return rs.getInt(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

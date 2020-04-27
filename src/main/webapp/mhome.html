@@ -3,35 +3,51 @@
 <head>
     <meta charset="utf-8">
     <title>Reimbursements</title>
+    <link rel="stylesheet" href = "home.css">
+
 </head>
 <body>
-<div style="text-align: left">
-    <h1>Welcome to Reimbursements!</h1>
-    <h2>You are logged in as: </h2>
-    <h2 id="usernameHeading"></h2>
-
-
-
-
-
-
+<div id="container" style="text-align: left">
+    <h1 class="style-1">Welcome to Reimbursements!</h1>
+</div>
+<div class="heading">
+    <h2> You are logged in as: </h2>
+    <h2 id="usernameHeading"> </h2>
 </div>
 
-<button id="getAllReimburse" type="button" onclick="getAllReimbursements()">View All Reimbursements</button>
-<button id="getPendReimburse" type="button" onclick="getPendingReimbursements()">View Pending Reimbursements</button>
-<button id="getApprovedReimburse" type="button" onclick="getApprovedReimbursements()">View Approved Reimbursements</button>
-<button id="getDeniedReimburse" type="button" onclick="getDeniedReimbursements()">View Denied Reimbursements</button>
-<form name= "logoutform" action="/logout" method="get">
-    <input type="submit" value="Log Out">
-</form>
+<div id="btn-table-grid">
+    <div id="buttons">
 
 
-<table id="reimbursementTable"></table>
+    <button id="getAllReimburse" class="submit-btn" type="button" onclick="getAllReimbursements()">View All Reimbursements</button>
+<button id="getPendReimburse" class="submit-btn" type="button" onclick="getPendingReimbursements()">View Pending Reimbursements</button>
+<button id="getApprovedReimburse" class="submit-btn" type="button" onclick="getApprovedReimbursements()">View Approved Reimbursements</button>
+<button id="getDeniedReimburse" class="submit-btn" type="button" onclick="getDeniedReimbursements()">View Denied Reimbursements</button>
+<form name= "logoutform" action="/logout" method="get"><button type="submit"  class="submit-btn">Log Out</button></form>
+    </div>
+
+<div id="mtable-box"></div>
+</div>
+
+<h1 class="heading">Statistics</h1>
+<div id="stats">
+    <!-- MANAGER URIS HAVE BEEN CREATED.
+    WRITE HTML/FUNCTIONS TO GENERATE THE INFO IN THS DIV. -->
+    <div id="mostRequests"></div>
+    <div id="stats2"></div>
+</div>
+
+
+
 </body>
 
 
 
 <script>
+
+    showUser();
+    statistics();
+    getPendingReimbursements();
 
     async function showUser(){
 
@@ -42,7 +58,6 @@
         document.getElementById("usernameHeading").innerHTML += body;
         console.log("finished show user")
     }
-    showUser()
 
 
     // Display the different types of reimbursements: ALL, PENDING, APPROVED, DENIED
@@ -50,19 +65,47 @@
     async function getAllReimbursements(){
         let httpResponse = await fetch("http://localhost:8080/api/reimbursements");
         let reimbursements = await httpResponse.json();
-        let tableData = document.getElementById("reimbursementTable");
+        let tableData = document.getElementById("mtable-box");
 
-        tableData.innerHTML = "<thread><tr><th>Reimbursement ID</th><th>Employee ID</th><th>Amount</th><th>Description</th><th>Status</th><th>Handling Manager</th></tr></thread>"
+        tableData.innerHTML = '<div class="table-row table-head">' +
+            '<div class="table-cell first-cell"><p>Reimbursement ID</p></div>' +
+            '<div class="table-cell"> <p>Employee ID</p> </div>' +
+            '<div class="table-cell"> <p>Amount</p></div>' +
+            '<div class="table-cell"> <p>Description</p> </div>' +
+            '<div class="table-cell"> <p>Status</p> </div>' +
+            '<div class="table-cell"> <p>Handling Manager</p></div>' +
+            '<div class="table-cell"> <p>Approve</p> </div>' +
+            '<div class="table-cell last-cell"> <p>Deny</p> </div></div>'
 
-        for (reimbursement of reimbursements){
+        for (reimbursement of reimbursements) {
+
+            if (reimbursement.managerID == undefined){
+                reimbursement.managerID = 'Under Review'
+            }
+
             tableData.innerHTML = tableData.innerHTML +
-            `<tr><td>${reimbursement.reimbursementID}</td>
-            <td>${reimbursement.requesterID}</td>
-            <td>${reimbursement.amount}</td>
-            <td>${reimbursement.description}</td>
-            <td>${reimbursement.status}</td>
-            <td>${reimbursement.managerID}</td>
-            <td> <button id=${reimbursement.reimbursementID}
+
+                `<div class="table-row">
+        <div class="table-cell first-cell">
+            <p>${reimbursement.reimbursementID}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.requesterID}</p>
+        </div>
+        <div class="table-cell">
+            <p>$${reimbursement.amount}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.description}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.status}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.managerID}</p>
+        </div>
+
+       <div class = "table-cell"> <button class="approve-submit-btn" id=${reimbursement.reimbursementID}
             rid=${reimbursement.reimbursementID}
             desc="${reimbursement.description}"
             amount=${reimbursement.amount}
@@ -70,14 +113,18 @@
             mid = ${reimbursement.managerID}
             status = ${reimbursement.status}
             onclick="approve(this);">Approve</button>
-             <button id=${reimbursement.reimbursementID + "d"}
+            </div>
+
+            <div class = "table-cell last-cell"> <button class="deny-submit-btn" id=${reimbursement.reimbursementID + "d"}
             rid=${reimbursement.reimbursementID}
             desc="${reimbursement.description}"
             amount=${reimbursement.amount}
             eid = ${reimbursement.requesterID}
             mid = ${reimbursement.managerID}
             status = ${reimbursement.status}
-            onclick="deny(this);">Deny</button></td>`
+            onclick="deny(this);">Deny</button>
+            </div>
+</div>`
 
             if (reimbursement.status === "Approved"){
                 document.getElementById(reimbursement.reimbursementID).style.visibility = 'hidden';
@@ -101,19 +148,47 @@
     async function getPendingReimbursements(){
         let httpResponse = await fetch("http://localhost:8080/api/pending");
         let reimbursements = await httpResponse.json();
-        let tableData = document.getElementById("reimbursementTable");
+        let tableData = document.getElementById("mtable-box");
 
-        tableData.innerHTML = "<thread><tr><th>Reimbursement ID</th><th>Employee ID</th><th>Amount</th><th>Description</th><th>Status</th><th>Handling Manager</th></tr></thread>"
+        tableData.innerHTML = '<div class="table-row table-head">' +
+            '<div class="table-cell first-cell"><p>Reimbursement ID</p></div>' +
+            '<div class="table-cell"> <p>Employee ID</p> </div>' +
+            '<div class="table-cell"> <p>Amount</p></div>' +
+            '<div class="table-cell"> <p>Description</p> </div>' +
+            '<div class="table-cell"> <p>Status</p> </div>' +
+            '<div class="table-cell"> <p>Handling Manager</p></div>' +
+            '<div class="table-cell"> <p>Approve</p> </div>' +
+            '<div class="table-cell last-cell"> <p>Deny</p> </div></div>'
 
-        for (reimbursement of reimbursements){
+        for (reimbursement of reimbursements) {
+
+            if (reimbursement.managerID == undefined){
+                reimbursement.managerID = 'Under Review'
+            }
+
             tableData.innerHTML = tableData.innerHTML +
-                `<tr><td>${reimbursement.reimbursementID}</td>
-            <td>${reimbursement.requesterID}</td>
-            <td>${reimbursement.amount}</td>
-            <td>${reimbursement.description}</td>
-            <td>${reimbursement.status}</td>
-            <td>${reimbursement.managerID}</td>
-            <td> <button id=${reimbursement.reimbursementID}
+
+                `<div class="table-row">
+        <div class="table-cell first-cell">
+            <p>${reimbursement.reimbursementID}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.requesterID}</p>
+        </div>
+        <div class="table-cell">
+            <p>$${reimbursement.amount}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.description}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.status}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.managerID}</p>
+        </div>
+
+       <div class = "table-cell"> <button class="approve-submit-btn" id=${reimbursement.reimbursementID}
             rid=${reimbursement.reimbursementID}
             desc="${reimbursement.description}"
             amount=${reimbursement.amount}
@@ -121,14 +196,34 @@
             mid = ${reimbursement.managerID}
             status = ${reimbursement.status}
             onclick="approveP(this);">Approve</button>
-                         <button id=${reimbursement.reimbursementID + "d"}
+            </div>
+
+            <div class = "table-cell last-cell"> <button class="deny-submit-btn" id=${reimbursement.reimbursementID + "d"}
             rid=${reimbursement.reimbursementID}
             desc="${reimbursement.description}"
             amount=${reimbursement.amount}
             eid = ${reimbursement.requesterID}
             mid = ${reimbursement.managerID}
             status = ${reimbursement.status}
-            onclick="denyP(this);">Deny</button></td>`
+            onclick="denyP(this);">Deny</button>
+            </div>
+</div>`
+
+            if (reimbursement.status === "Approved"){
+                document.getElementById(reimbursement.reimbursementID).style.visibility = 'hidden';
+            }
+
+            if (reimbursement.status === "Denied"){
+                document.getElementById(reimbursement.reimbursementID).style.visibility = 'hidden';
+            }
+
+            if (reimbursement.status === "Approved"){
+                document.getElementById(reimbursement.reimbursementID+"d").style.visibility = 'hidden';
+            }
+
+            if (reimbursement.status === "Denied"){
+                document.getElementById(reimbursement.reimbursementID+"d").style.visibility = 'hidden';
+            }
 
         }
     }
@@ -137,42 +232,89 @@
     async function getApprovedReimbursements(){
         let httpResponse = await fetch("http://localhost:8080/api/approved");
         let reimbursements = await httpResponse.json();
-        let tableData = document.getElementById("reimbursementTable");
+        let tableData = document.getElementById("mtable-box");
 
-        tableData.innerHTML = "<thread><tr><th>Reimbursement ID</th><th>Employee ID</th><th>Amount</th><th>Description</th><th>Status</th><th>Handling Manager</th></tr></thread>"
+        tableData.innerHTML = '<div class="table-row table-head">' +
+            '<div class="table-cell first-cell"><p>Reimbursement ID</p></div>' +
+            '<div class="table-cell"> <p>Employee ID</p> </div>' +
+            '<div class="table-cell"> <p>Amount</p></div>' +
+            '<div class="table-cell"> <p>Description</p> </div>' +
+            '<div class="table-cell"> <p>Status</p> </div>' +
+            '<div class="table-cell last-cell"> <p>Handling Manager</p></div>'
 
-        for (reimbursement of reimbursements){
+
+        for (reimbursement of reimbursements) {
+
+            if (reimbursement.managerID == undefined){
+                reimbursement.managerID = 'Under Review'
+            }
+
             tableData.innerHTML = tableData.innerHTML +
-                `<tr><td>${reimbursement.reimbursementID}</td>
-            <td>${reimbursement.requesterID}</td>
-            <td>${reimbursement.amount}</td>
-            <td>${reimbursement.description}</td>
-            <td>${reimbursement.status}</td>
-            <td>${reimbursement.managerID}</td>`
+
+                `<div class="table-row">
+        <div class="table-cell first-cell">
+            <p>${reimbursement.reimbursementID}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.requesterID}</p>
+        </div>
+        <div class="table-cell">
+            <p>$${reimbursement.amount}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.description}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.status}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.managerID}</p>
+        </div>
+            </div>`
         }
     }
 
     async function getDeniedReimbursements(){
         let httpResponse = await fetch("http://localhost:8080/api/denied");
         let reimbursements = await httpResponse.json();
-        let tableData = document.getElementById("reimbursementTable");
+        let tableData = document.getElementById("mtable-box");
 
-        tableData.innerHTML = "<thread><tr><th>Reimbursement ID</th><th>Employee ID</th><th>Amount</th><th>Description</th><th>Status</th><th>Handling Manager</th></tr></thread>"
+        tableData.innerHTML = '<div class="table-row table-head">' +
+            '<div class="table-cell first-cell"><p>Reimbursement ID</p></div>' +
+            '<div class="table-cell"> <p>Employee ID</p> </div>' +
+            '<div class="table-cell"> <p>Amount</p></div>' +
+            '<div class="table-cell"> <p>Description</p> </div>' +
+            '<div class="table-cell"> <p>Status</p> </div>' +
+            '<div class="table-cell last-cell"> <p>Handling Manager</p></div>'
 
-        for (reimbursement of reimbursements){
+
+        for (reimbursement of reimbursements) {
+
             tableData.innerHTML = tableData.innerHTML +
-                `<tr><td>${reimbursement.reimbursementID}</td>
-            <td>${reimbursement.requesterID}</td>
-            <td>${reimbursement.amount}</td>
-            <td>${reimbursement.description}</td>
-            <td>${reimbursement.status}</td>
-            <td>${reimbursement.managerID}</td>`
+
+                `<div class="table-row">
+        <div class="table-cell first-cell">
+            <p>${reimbursement.reimbursementID}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.requesterID}</p>
+        </div>
+        <div class="table-cell">
+            <p>$${reimbursement.amount}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.description}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.status}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.managerID}</p>
+        </div>
+            </div>`
 
         }
     }
-
-
-
 
 
 
@@ -274,6 +416,69 @@
         console.log(httpResponse);
         console.log(reimbursement);
         await getPendingReimbursements();
+    }
+
+    async function statistics(){
+        let httpResponse = await fetch("http://localhost:8080/api/mostrequests");
+            let mostRequests = await httpResponse.json();
+            console.log(mostRequests);
+        httpResponse = await fetch("http://localhost:8080/api/avgreimburse");
+            let avgReimburse = await httpResponse.json();
+        httpResponse = await fetch("http://localhost:8080/api/totalapproved");
+            let totalApproved = await httpResponse.json();
+        httpResponse = await fetch("http://localhost:8080/api/totaldenied");
+            let totalDenied = await httpResponse.json();
+        httpResponse = await fetch("http://localhost:8080/api/totalrequests");
+            let totalRequests = await httpResponse.json();
+
+            console.log(avgReimburse);
+            console.log(totalApproved);
+            console.log(totalDenied);
+            console.log(totalRequests);
+
+        let tableData = document.getElementById("mostRequests");
+
+        tableData.innerHTML = '<div class="stats-table-row table-head">' +
+            '<div class="table-cell first-cell">' +
+            '        <p>Requester ID</p><' +
+            '/div>' +
+            '<div class="table-cell">' +
+            '<p>Reimbursement Requests</p>' +
+            '</div>' +
+            '</div>'
+
+        for (request of mostRequests){
+        tableData.innerHTML = tableData.innerHTML +
+            `<div class="stats-table-row">
+        <div class="stats-table-cell first-cell">
+            <p>${request.requesterID}</p>
+        </div>
+        <div class="stats-table-cell last-cell">
+            <p>${request.reimbursementAttempts}</p>
+        </div>
+    </div>`
+
+        }
+
+        tableData = document.getElementById("stats2");
+
+        tableData.innerHTML =
+            `<div class="stats-table-row">
+                <div class="stats-table-cell">Average Reimbursement Amount</div>
+                <div class="table-cell last-cell">$${avgReimburse}</div>
+             </div>
+             <div class="stats-table-row">
+                <div class="stats-table-cell">Total Amount Approved</div>
+                <div class="table-cell last-cell">$${totalApproved}</div>
+             </div>
+             <div class="stats-table-row">
+                <div class="stats-table-cell">Total Amount Denied</div>
+                <div class="table-cell last-cell">$${totalDenied}</div>
+             </div>
+             <div class="stats-table-row">
+                <div class="stats-table-cell">Total Reimbursement Requests</div>
+                <div class="table-cell last-cell">${totalRequests}</div>
+             </div>`
     }
 
 

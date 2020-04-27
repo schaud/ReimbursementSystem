@@ -8,4 +8,6 @@ public interface ManagerDAO {
 
     Manager updateApproved(Manager manager, int amount);
 
+
+
 }

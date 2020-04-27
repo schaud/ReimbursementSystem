@@ -1,6 +1,7 @@
 package dev.chaudhry.services;
 
 import dev.chaudhry.entities.Employee;
+import dev.chaudhry.entities.EmployeeReimburse;
 import dev.chaudhry.entities.Manager;
 import dev.chaudhry.entities.Reimbursement;
 
@@ -22,7 +23,21 @@ public interface ReimbursementService {
 
      ArrayList<Reimbursement> viewDeniedReimbursements ();
 
+     ArrayList<Reimbursement> viewMyPending(Employee employee);
+     ArrayList<Reimbursement> viewMyApproved(Employee employee);
+     ArrayList<Reimbursement> viewMyDenied(Employee employee);
+
      ArrayList<Reimbursement> viewEmployeeReimbursements (Employee employee);
+
+     ArrayList<EmployeeReimburse> mostRequests();
+
+     int avgReimburse();
+
+     int totalApproved();
+
+     int totalDenied();
+
+     int totalRequests();
 
 
 }

@@ -1,6 +1,6 @@
 package dev.chaudhry.daos;
 
-import dev.chaudhry.entities.Employee;
+import dev.chaudhry.entities.EmployeeReimburse;
 import dev.chaudhry.entities.Reimbursement;
 import java.util.ArrayList;
 
@@ -21,6 +21,19 @@ public interface ReimbursementDAO {
     Reimbursement getReimbursementByID(int id);
 
     ArrayList<Reimbursement> getReimbursementsByEmployeeID(String Id);
+
+    ArrayList<EmployeeReimburse> mostRequests();
+
+    int avgReimburse();
+
+    int totalApproved();
+
+    int totalDenied();
+
+    int totalRequests();
+
+
+
 
 
 }

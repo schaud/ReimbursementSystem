@@ -1,30 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <meta charset="utf-8">
     <title>Reimbursements</title>
+    <link rel="stylesheet" href = "home.css">
+
 </head>
 <body>
-<div style="text-align: left">
-    <h1>Welcome to Reimbursements!</h1>
-    <h2 id="usernameHeading"> You are logged in as: </h2>
 
+<div id="container" style="text-align: left">
+    <h1 class="style-1">Welcome to Reimbursements!</h1>
+</div>
+<div class="heading">
+    <h2> You are logged in as: </h2>
+    <h2 id="usernameHeading"> </h2>
+</div>
+
+<div id="btn-table-grid">
+    <div id="buttons">
+        <button id="getAllReimburse" class="submit-btn" type="button" onclick="getEmpReimbursements()">View Reimbursement History </button>
+        <button id="getPendReimburse" class="submit-btn" type="button" onclick="getPendReimbursements()">View Your Pending Reimbursements</button>
+        <button id="getAppReiemburse" class="submit-btn" type="button" onclick="getApprovedReimbursements()">View Your Approved Reimbursements</button>
+        <button id="getDenReimburse" class="submit-btn" type="button" onclick="getDeniedReimbursements()">View Your Denied Reimbursements</button>
+        <button type="button" class="submit-btn" id="formButton">Create a new Reimbursement</button>
+        <form name= "logoutform" action="/logout" method="get"><button type="submit"  class="submit-btn">Log Out</button></form>
+    </div>
+
+    <div id="table-box">
+    </div>
 
 </div>
 
-<button id="getAllReimburse" type="button" onclick="getEmpReimbursements()">View Your Reimbursements</button>
-<button id="submitReimburse" type="button" onclick="getEmpReimbursements()">Submit a New Reimbursement Request</button>
-
-<form name= "logoutform" action="/logout" method="get">
-    <input type="submit" value="Log Out">
+<div id="reimbox">
+<form id="form1" class="reimb-box" hidden>
+    <b>Amount:</b> <input type="text" name="amount" class="input-field" id="amount" placeholder="Enter an amount">
+    <br><br>
+    <b>Description:</b><br>
+    <textarea id="description" class="input-field" name="description" placeholder="Enter a short description"></textarea>
+    <button type="button" id="submit" class="submit-btn" onclick="addReimbursement()">Submit</button>
 </form>
+</div>
 
-<table id="reimbursementTable"></table>
+
 
 </body>
 
 
 <script>
+
+    // ON DOCUMENT READY: LOAD USERNAME AND CREATE REIMBURSEMENT TOGGLE
+
+    showUser();
+    getPendReimbursements();
+
+
+    $(document).ready(function() {
+        $("#formButton").click(function() {
+            $("#form1").toggle();
+        });
+    });
+
+
+
+    // FUNCTIONS: USER ACTIONS
 
     async function showUser(){
 
@@ -35,30 +74,211 @@
         document.getElementById("usernameHeading").innerHTML += body;
         console.log("finished show user")
     }
-    showUser()
 
 
-    async function getEmpReimbursements(){
+
+    async function getEmpReimbursements() {
         let httpResponse = await fetch("http://localhost:8080/api/employeereimbursements");
         let reimbursements = await httpResponse.json();
-        let tableData = document.getElementById("reimbursementTable");
+        let tableData = document.getElementById("table-box");
 
-        tableData.innerHTML = "<thread><tr><th>Reimbursement ID</th><th>Employee ID</th><th>Amount</th><th>Description</th><th>Status</th><th>Handling Manager</th></tr></thread>"
+        tableData.innerHTML = '<div class="table-row table-head"><div class="table-cell first-cell"><p>Reimbursement ID</p>' +
+            '</div> <div class="table-cell"> <p>Employee ID</p> </div> <div class="table-cell"> <p>Amount</p></div>' +
+            '<div class="table-cell"> <p>Description</p> </div> <div class="table-cell"> <p>Status</p> </div> <div class="table-cell">' +
+            '<p>Handling Manager</p> </div></div>'
 
-        for (reimbursement of reimbursements){
+        for (reimbursement of reimbursements) {
+
+            if (reimbursement.managerID == undefined){
+                reimbursement.managerID = 'Under Review'
+            }
+
             tableData.innerHTML = tableData.innerHTML +
-                `<tr><td>${reimbursement.reimbursementID}</td>
-            <td>${reimbursement.requesterID}</td>
-            <td>${reimbursement.amount}</td>
-            <td>${reimbursement.description}</td>
-            <td>${reimbursement.status}</td>
-            <td>${reimbursement.managerID}</td>`
-        }
 
+                `<div class="table-row">
+        <div class="table-cell first-cell">
+            <p>${reimbursement.reimbursementID}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.requesterID}</p>
+        </div>
+        <div class="table-cell">
+            <p>$${reimbursement.amount}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.description}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.status}</p>
+        </div>
+        <div class="table-cell last-cell">
+            <p>${reimbursement.managerID}</p>
+        </div>
+    </div>`
+
+        }
     }
 
+        async function getPendReimbursements() {
+
+            let httpResponse = await fetch("http://localhost:8080/api/epending");
+            let reimbursements = await httpResponse.json();
+            let tableData = document.getElementById("table-box");
+
+            tableData.innerHTML = '<div class="table-row table-head"><div class="table-cell first-cell"><p>Reimbursement ID</p>' +
+                '</div> <div class="table-cell"> <p>Employee ID</p> </div> <div class="table-cell"> <p>Amount</p></div>' +
+                '<div class="table-cell"> <p>Description</p> </div> <div class="table-cell"> <p>Status</p> </div> <div class="table-cell">' +
+                '<p>Handling Manager</p> </div></div>'
+
+            for (reimbursement of reimbursements) {
+
+                if (reimbursement.managerID == undefined){
+                    reimbursement.managerID = 'Under Review'
+                }
+
+                tableData.innerHTML = tableData.innerHTML +
+
+                    `<div class="table-row">
+        <div class="table-cell first-cell">
+            <p>${reimbursement.reimbursementID}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.requesterID}</p>
+        </div>
+        <div class="table-cell">
+            <p>$${reimbursement.amount}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.description}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.status}</p>
+        </div>
+        <div class="table-cell last-cell">
+            <p>${reimbursement.managerID}</p>
+        </div>
+    </div>`
 
 
+            }
+
+        }
+
+        async function getApprovedReimbursements() {
+            let httpResponse = await fetch("http://localhost:8080/api/eapproved");
+            let reimbursements = await httpResponse.json();
+            let tableData = document.getElementById("table-box");
+
+            tableData.innerHTML = '<div class="table-row table-head"><div class="table-cell first-cell"><p>Reimbursement ID</p>' +
+                '</div> <div class="table-cell"> <p>Employee ID</p> </div> <div class="table-cell"> <p>Amount</p></div>' +
+                '<div class="table-cell"> <p>Description</p> </div> <div class="table-cell"> <p>Status</p> </div> <div class="table-cell">' +
+                '<p>Handling Manager</p> </div></div>'
+
+            for (reimbursement of reimbursements) {
+
+                if (reimbursement.managerID == undefined){
+                    reimbursement.managerID = 'Under Review'
+                }
+
+                tableData.innerHTML = tableData.innerHTML +
+
+                    `<div class="table-row">
+        <div class="table-cell first-cell">
+            <p>${reimbursement.reimbursementID}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.requesterID}</p>
+        </div>
+        <div class="table-cell">
+            <p>$${reimbursement.amount}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.description}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.status}</p>
+        </div>
+        <div class="table-cell last-cell">
+            <p>${reimbursement.managerID}</p>
+        </div>
+    </div>`
+
+            }
+
+        }
+
+        async function getDeniedReimbursements() {
+            let httpResponse = await fetch("http://localhost:8080/api/edenied");
+            let reimbursements = await httpResponse.json();
+            let tableData = document.getElementById("table-box");
+
+            tableData.innerHTML = '<div class="table-row table-head"><div class="table-cell first-cell"><p>Reimbursement ID</p>' +
+                '</div> <div class="table-cell"> <p>Employee ID</p> </div> <div class="table-cell"> <p>Amount</p></div>' +
+                '<div class="table-cell"> <p>Description</p> </div> <div class="table-cell"> <p>Status</p> </div> <div class="table-cell">' +
+                '<p>Handling Manager</p> </div></div>'
+
+            for (reimbursement of reimbursements) {
+
+                if (reimbursement.managerID == undefined){
+                    reimbursement.managerID = 'Under Review'
+                }
+
+                tableData.innerHTML = tableData.innerHTML +
+
+                    `<div class="table-row">
+        <div class="table-cell first-cell">
+            <p>${reimbursement.reimbursementID}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.requesterID}</p>
+        </div>
+        <div class="table-cell">
+            <p>$${reimbursement.amount}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.description}</p>
+        </div>
+        <div class="table-cell">
+            <p>${reimbursement.status}</p>
+        </div>
+        <div class="table-cell last-cell">
+            <p>${reimbursement.managerID}</p>
+        </div>
+    </div>`
+
+            }
+
+        }
+
+        async function addReimbursement() {
+
+            let reimbursement = {
+                reimbursementID: 0,
+                status: "Pending",
+                managerID: null
+            };
+
+            reimbursement.requesterID = document.getElementById("usernameHeading").innerText;
+            reimbursement.amount = document.getElementById("amount").value;
+            reimbursement.description = document.getElementById("description").value;
+
+            console.log(reimbursement)
+
+            let settings = {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(reimbursement)
+            };
+
+            let httpResponse = await fetch("http://localhost:8080/api/submitreimbursement", settings);
+
+
+            console.log(httpResponse);
+            await getEmpReimbursements();
+
+        }
 
 </script>
+
+
 </html>

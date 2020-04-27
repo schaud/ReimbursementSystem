@@ -16,8 +16,8 @@ import java.io.PrintWriter;
 @WebServlet(name = "ManagerLoginServlet", urlPatterns = "/mlogin")
 public class ManagerLoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        String username = request.getParameter("musername");
+        String password = request.getParameter("mpassword");
 
         LogInService loginserv = new LogInServiceImpl();
         String destPage = "login.html";

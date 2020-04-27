@@ -32,6 +32,16 @@ public class DispatcherServlet extends HttpServlet {
             case "/api/pending" : rcontroller.getPendingReimbursements(request, response); break;
             case "/api/approved" : rcontroller.getApprovedReimbursements(request, response); break;
             case "/api/denied" : rcontroller.getDeniedReimbursements(request, response); break;
+            case "/api/submitreimbursement" : rcontroller.submitReimbursement(request, response); break;
+            case "/api/epending" : rcontroller.getMyPendingReimbursements(request, response); break;
+            case "/api/eapproved" : rcontroller.getMyApprovedReimbursements(request, response); break;
+            case "/api/edenied" : rcontroller.getMyDeniedReimbursements(request, response); break;
+            // BELOW ARE ALL MANAGER STATISTICS API URIS
+            case "/api/mostrequests" : rcontroller.showMostRequests(request, response); break;
+            case "/api/avgreimburse" : rcontroller.showAvgReimburse(request, response); break;
+            case "/api/totalapproved" : rcontroller.showTotalApproved(request, response); break;
+            case "/api/totaldenied" : rcontroller.showTotalDenied(request, response); break;
+            case "/api/totalrequests" : rcontroller.showTotalRequests(request, response); break;
 
 
 

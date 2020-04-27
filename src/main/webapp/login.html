@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Revature Reimbursement System</title>
+    <link rel="stylesheet" href = "style.css">
     <script
             src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -12,34 +13,91 @@
 
 </head>
 <body>
+<svg viewBox="0 0 1960 200">
+    <symbol id="s-text">
+        <text text-anchor="middle" x="50%" y="80%">Welcome to Revature</text>
+    </symbol>
+    <g class = "g-ants">
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+        <use xlink:href="#s-text" class="text-copy"></use>
+    </g>
+</svg>
 
-<div>
-    <h1> Employee Login</h1>
-    <br>
-    <form name= "loginform" action="/login" method="post">
-
-        Please enter your username
-        <input type="text" name="username"/><br>
-
-        Please enter your password
-        <input type="text" name="password"/>
-
-
-        <input type="submit" value="Login">
-
-    </form>
+<svg viewBox="0 0 1960 200" style="overflow: visible">
+    <symbol id="t-text">
+        <text text-anchor="middle" x="50%" y="80%">Reimbursements</text>
+    </symbol>
+    <g class = "g-ants">
+        <use xlink:href="#t-text" class="text-copy"></use>
+        <use xlink:href="#t-text" class="text-copy"></use>
+        <use xlink:href="#t-text" class="text-copy"></use>
+        <use xlink:href="#t-text" class="text-copy"></use>
+        <use xlink:href="#t-text" class="text-copy"></use>
+    </g>
+</svg>
+<div class="hero">
+    <div class="form-box">
+        <div class="button-box">
+            <div id="btn"></div>
+            <button type="button" class="toggle-btn" onclick="manager()">Manager</button>
+            <button type="button" class="toggle-btn" onclick="employee()" style="float:left">Employee</button>
+        </div>
+        <form id="employee" name="emp" class="input-group" action="login" method="post">
+            <input type="text" name="username" class="input-field" placeholder="Employee ID">
+            <input type="text" name="password" class="input-field" placeholder="Password">
+            <button type="submit" class="submit-btn">Log In</button>
+        </form>
+        <form id="manager" name="mnger" class="input-group" action="/mlogin" method="post">
+            <input type="text" name="musername" class="input-field" placeholder="Manager ID">
+            <input type="text" name="mpassword" class="input-field" placeholder="Password">
+            <button type="submit" class="submit-btn">Log In</button>
+        </form>
+    </div>
 </div>
 
-<button id="returnMain" type="button">Return to main login</button>
+<script>
+    let x = document.getElementById("employee");
+    let y = document.getElementById("manager");
+    let z = document.getElementById("btn");
 
+    function manager(){
+        x.style.left = "-400px";
+        y.style.left = "50px";
+        z.style.left = "110px";
+    }
 
-
-</body>
-
-<script type="text/javascript">
+    function employee(){
+        x.style.left = "50px";
+        y.style.left = "450px";
+        z.style.left = "0";
+    }
 
     $(document).ready(function() {
-        $("form[name='loginform']").validate({
+        $("form[name='emp']").validate({
+            rules: {
+                username: "required",
+                password: "required"
+            },
+
+            messages: {
+                username: {
+                    required: "Please enter a username.",
+                },
+
+                password: {
+                    required: "Please enter a password."
+                }
+
+            }
+        });
+
+    });
+
+    $(document).ready(function() {
+        $("form[name='mnger']").validate({
             rules: {
                 username: "required",
                 password: "required"
@@ -61,12 +119,7 @@
 
 
 
-    document.getElementById("returnMain").onclick = function () {
-        location.href = "http://localhost:8080/mainlogin.html";
-    };
-
 </script>
 
-
-
+</body>
 </html>
